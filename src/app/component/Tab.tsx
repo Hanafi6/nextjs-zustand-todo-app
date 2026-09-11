@@ -2,16 +2,25 @@
 
 import { motion } from "framer-motion";
 import { Delete } from "lucide-react";
-import useTodoStore from "../zustand/ManeagMent";
+// import useTodoStore from "@/zustand/ManeagMent";
+import type { Tab as TAB } from "../types/interFaces";
+import useTodoStore from "@/zustand/ManeagMent";
 
-export default function Tab({ handelRemodetab, tab, isActive, onClick, onContext }) {
+type PropsTab = {
+  handelRemodetab?: () => void,
+  tab: TAB,
+  isActive?:
+  boolean,
+  onContext?: any,
+  onClick?: (id: string) => void;
+}
 
+export default function Tab({ handelRemodetab = () => { }, tab, isActive, onClick, onContext, ...porps }: PropsTab) {
   return (
     <motion.button
       key={tab.id}
-      onClick={() => {
-        onClick(tab.id);
-      }}
+      onClick={() => onClick?.(tab.id)}
+      {...porps}
       onContextMenu={(e) => onContext(e, tab)}
       onDoubleClick={(e) => onContext(e, tab)}
       initial={{ y: 10, opacity: 0 }}
@@ -21,7 +30,7 @@ export default function Tab({ handelRemodetab, tab, isActive, onClick, onContext
       className={`relative flex items-center space-x-2 min-w-[110px] px-5 py-2
         rounded-t-lg border border-transparent
         cursor-pointer select-none whitespace-nowrap
-        text-sm font-semibold
+        text-sm font-semibold 
         ${isActive
           ? "bg-white dark:bg-gray-800 border-b-0 text-gray-900 dark:text-white shadow"
           : "text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
@@ -49,8 +58,8 @@ export default function Tab({ handelRemodetab, tab, isActive, onClick, onContext
       )}
       <Delete
         onClick={(e) => {
-          e.stopPropagation(); // يمنع الكليك يوصل للتاب نفسه
-          handelRemodetab(tab);
+          e.stopPropagation();
+          handelRemodetab();
         }}
         className="hover:text-red-400 duration-[200ms]"
       />

@@ -1,16 +1,23 @@
 // Todo.jsx
-import React from "react";
+'use client'
+import { memo } from "react";
+import { Todo as TODO } from "../types/interFaces";
+import { toggleStatusTodo } from "@/helpers/todoActions";
 
-export default function Todo({ handelClick, todo }) {
+function Todo({ todo }: { todo: TODO }) {
+
+
+  const ToggleStatusTodo = async () => {
+    await toggleStatusTodo(todo.id, { completed: !todo.completed }, 'todos');
+  }
 
   return (
     <li
       className={`flex items-center gap-3 p-3 rounded-lg border ${todo.completed ? "bg-green-50 border-green-300" : "bg-gray-50 border-gray-200"
         } transition`}
       data-id={todo.id}
-      onClick={handelClick}
+      onClick={ToggleStatusTodo}
     >
-      {/* Checkbox */}
       <input
         type="checkbox"
         checked={todo.completed}
@@ -18,7 +25,6 @@ export default function Todo({ handelClick, todo }) {
         className="w-5 h-5 accent-green-500 cursor-pointer"
       />
 
-      {/* نص المهمة */}
       <span
         className={`flex-1 text-lg ${todo.completed ? "line-through text-gray-400" : "text-gray-800"
           }`}
@@ -28,3 +34,6 @@ export default function Todo({ handelClick, todo }) {
     </li>
   );
 }
+
+
+export default memo(Todo)

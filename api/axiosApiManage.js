@@ -1,10 +1,14 @@
 import axios from "axios";
 
-const BASE_URL = "https://69fa1137c509a40d3aa3d6bb.mockapi.io"; // أو رابط الـ json-server عندك
+// const BASE_URL = "https://69fa1137c509a40d3aa3d6bb.mockapi.io"; 
 
+const BASE_URL = 'http://localhost:3000/api'
 
-export const getTabs = () => {
-  return axios.get(`${BASE_URL}/tabs`);
+export const getTabs = async () => {
+  const res = await axios.get(`${BASE_URL}/tabs`);
+  console.log(res)
+  return res
+  // return axios.get(`${BASE_URL}/tabs`);
 };
 
 // Helper function to simulate PATCH using GET and PUT

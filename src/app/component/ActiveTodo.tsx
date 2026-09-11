@@ -1,52 +1,45 @@
 // ActiveTodos.jsx
 "use client";
-import React, { useEffect, useState } from "react";
-import useTodoStore from "../zustand/ManeagMent";
 import Todo from "./Todo";
 import AddTodoForm from "./AddTodoForm";
 import TabHeader from "./TabHeader";
-import RenameTab from "./RenameTab";
 import { motion, AnimatePresence } from "framer-motion";
+import useTodoStore from "@/zustand/ManeagMent";
+import { Tab, Todo as TODOTYPE } from "../types/interFaces";
+import { useMemo, useState } from "react";
 
 
-export default function ActiveTodo() {
-  const activeTabId = useTodoStore((state) => state.activeTabId);
-  const { tabs, setActiveTab } = useTodoStore();
+export default function ActiveTodo({ tabs, todos }: { tabs: Tab[], todos: TODOTYPE[] }) {
+  // const activeTabId = useTodoStore((state) => state.activeTabId);
+  // const { tabs, setActiveTab } = useTodoStore();
   const [rename, setRename] = useState(false);
   const [addTodo, setAdtodo] = useState(false);
 
-  const activeTab = tabs.find((tab) => tab.id === activeTabId);
 
+  const activeTabId = useTodoStore(state => state.activeTabId)
+  const setActiveTab = useTodoStore(state => state.setActiveTab)
 
-  useEffect(() => {
-  }, [rename])
+  const activeTab = tabs.find((tab) => String(tab.id) === String(activeTabId));
 
-  if (!activeTab) {
-    return (
-      <div className="p-6 text-center text-gray-500">
-        <p>No tab selected.</p>
-      </div>
-    );
-  }
+  const tabTodos = useMemo(() => {
+    return todos.filter(todo => String(todo.tabId) === String(activeTabId))
+  }, [todos, activeTabId]);
 
-  const HandelDeletTodo = (tb) => {
+  const HandelDeletTodo = (tb: Tab) => {
     console.log(tb)
   }
 
 
 
   return (
-    <div className="bg-black rounded-xl shadow p-6">
-      {/* عنوان التاب */}
+    <div className="rounded-xl shadow p-6">
       <TabHeader deleteTab={HandelDeletTodo} rename={setRename} addTodo={setAdtodo} activeTab={activeTab} />
-      {/* قائمة المهام */}
       <ul className="space-y-3">
-        {activeTab.todos?.map((todo) => (
+        {tabTodos?.map((todo) => (
           <Todo key={todo.id} todo={todo} />
         ))}
       </ul>
 
-      {/* الزر أسفل القائمة */}
       <div className="mt-6 flex justify-center">
         <button
           onClick={() => setActiveTab(null)}
@@ -57,7 +50,7 @@ export default function ActiveTodo() {
       </div>
 
       <AnimatePresence>
-        {rename && (
+        {/* {rename && (
           <motion.div
             key="overlay"
             initial={{ opacity: 0 }}
@@ -77,7 +70,7 @@ export default function ActiveTodo() {
               <RenameTab close={setRename} todo={activeTab} />
             </motion.div>
           </motion.div>
-        )}
+        )} */}
       </AnimatePresence>
 
       <AnimatePresence>
