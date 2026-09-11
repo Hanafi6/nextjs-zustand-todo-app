@@ -21,6 +21,8 @@ export async function getTodos(end_point: DynamicEndpoint): Promise<ApiResponse<
             next: { tags: ['todos'] }
         });
 
+        console.log(getBaseUrl(), end_point)
+
         if (!res.ok) {
             console.error(`❌ Fetch Todos Failed | Status: ${res.status}`);
             return { data: [], success: false } as unknown as ApiResponse<Todo[]>;
@@ -62,6 +64,8 @@ export async function getTabs(end_point: DynamicEndpoint): Promise<ApiResponse<T
         const res = await fetch(`${getBaseUrl()}${end_point}`, {
             next: { tags: ['tabs'] }
         });
+
+        console.log(getBaseUrl(), end_point)
 
         if (!res.ok) {
             console.error(`❌ Fetch Tabs Failed | Status: ${res.status}`);
